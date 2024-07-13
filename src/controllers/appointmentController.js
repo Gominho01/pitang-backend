@@ -100,9 +100,23 @@ export const getOne = (req, res) => {
   res.json(appointment);
 };
 
+
+export const deleteAppointment = (req, res) => {
+  const { id } = req.params;
+
+  const appointment = appointments.filter(appointment => appointment.id !== id);
+  if (!appointment) {
+    return res.status(404).json({ error: 'Agendamento não encontrado' });
+  }
+
+  AppointmentService.deleteAppointment(id);
+  res.json({ message: 'Agendamento deletado com sucesso' });
+};
+
 module.exports = {
   getAll,
   createAppointment,
   updateStatus,
-	getOne
+	getOne,
+	deleteAppointment
 };
