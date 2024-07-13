@@ -54,3 +54,16 @@ const createAppointment = (req, res) => {
   appointments.push(newAppointment);
 			res.status(201).json(newAppointment);
 };
+
+const updateStatus = (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+
+  const appointment = appointments.find(app => app.id === id);
+  if (!appointment) {
+    return res.status(404).json({ error: 'Agendamento não encontrado' });
+  }
+
+  appointment.completed = completed;
+  res.json(appointment);
+};
