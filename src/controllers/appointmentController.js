@@ -18,6 +18,7 @@ const appointmentSchema = z.object({
   }, {
     message: 'Os agendamentos só podem ser feitos para hoje ou datas futuras'
   }),
+  conclusion: z.string().optional(),
   completed: z.boolean().default(false)
 });
 
@@ -27,7 +28,7 @@ const getAll = (req, res) => {
 
 const createAppointment = async (req, res) => {
   try {
-    const { name, birthDate, appointmentDay } = appointmentSchema.parse(req.body);
+    const { name, birthDate, appointmentDay, completed, conclusion } = appointmentSchema.parse(req.body);
     const appointmentDate = new Date(appointmentDay);
 
     const invalidHour = (
@@ -76,7 +77,7 @@ const createAppointment = async (req, res) => {
 
 const updateStatus = (req, res) => {
   const { id } = req.params;
-  const { completed } = req.body;
+  const { completed, conclusion } = req.body;
 
   const appointment = appointments.find(app => app.id === id);
   if (!appointment) {
@@ -84,5 +85,12 @@ const updateStatus = (req, res) => {
   }
 
   appointment.completed = completed;
+	appointment.conclusion = conclusion || appointment.conclusion;
   res.json(appointment);
+};
+
+module.exports = {
+  getAllAppointments,
+  createAppointment,
+  updateAppointment
 };
