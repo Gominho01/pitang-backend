@@ -89,8 +89,20 @@ const updateStatus = (req, res) => {
   res.json(appointment);
 };
 
+export const getOne = (req, res) => {
+  const { id } = req.params;
+
+  const appointment = appointments.find(app => app.id === id)
+  if (!appointment) {
+    return res.status(404).json({ error: 'Agendamento não encontrado' });
+  }
+
+  res.json(appointment);
+};
+
 module.exports = {
-  getAllAppointments,
+  getAll,
   createAppointment,
-  updateAppointment
+  updateStatus,
+	getOne
 };
