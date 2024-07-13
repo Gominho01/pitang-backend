@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const appointmentRoutes = require('./routes/route');
+const appointmentRoutes = require('./routes/router');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
