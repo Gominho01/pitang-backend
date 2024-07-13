@@ -1,4 +1,6 @@
-const appointments = [];
+const { z } = require('zod');
+
+let appointments = [];
 const MAX_APPOINTMENTS_PER_HOUR = 2;
 const MAX_APPOINTMENTS_PER_DAY = 20;
 
@@ -28,7 +30,7 @@ const getAll = (req, res) => {
 
 const createAppointment = async (req, res) => {
   try {
-    const { name, birthDate, appointmentDay, completed, conclusion } = appointmentSchema.parse(req.body);
+    const { name, birthDate, appointmentDay} = appointmentSchema.parse(req.body);
     const appointmentDate = new Date(appointmentDay);
 
     const invalidHour = (
@@ -45,7 +47,7 @@ const createAppointment = async (req, res) => {
       app => new Date(app.appointmentDate).getTime() === appointmentDate.getTime()
     );
 
-    if (appointmentsAtSameTime.length >= MAX_APPOINTMENTS_PER_SLOT) {
+    if (appointmentsAtSameTime.length >= MAX_APPOINTMENTS_PER_HOUR) {
       return res.status(400).json({ error: 'Este horário já está totalmente ocupado' });
     }
 
@@ -58,10 +60,9 @@ const createAppointment = async (req, res) => {
     }
 
     const newAppointmentId = Date.now().toString();
-    const hashedId = await bcrypt.hash(newAppointmentId, 10);
 
     const newAppointment = {
-      id: hashedId,
+      id: newAppointmentId,
       name,
       birthDate,
       appointmentDate,
@@ -71,9 +72,11 @@ const createAppointment = async (req, res) => {
     appointments.push(newAppointment);
     res.status(201).json(newAppointment);
   } catch (error) {
-    return res.status(400).json({ error: error.errors[0].message });
+		console.log(error);
+		const errorMessage = error?.errors?.[0]?.message || 'Erro desconhecido';
+		return res.status(400).json({ error: errorMessage });
   }
-}
+};
 
 const updateStatus = (req, res) => {
   const { id } = req.params;
@@ -89,7 +92,8 @@ const updateStatus = (req, res) => {
   res.json(appointment);
 };
 
-export const getOne = (req, res) => {
+
+const getOne = (req, res) => {
   const { id } = req.params;
 
   const appointment = appointments.find(app => app.id === id)
@@ -101,15 +105,15 @@ export const getOne = (req, res) => {
 };
 
 
-export const deleteAppointment = (req, res) => {
+const deleteAppointment = (req, res) => {
   const { id } = req.params;
 
-  const appointment = appointments.filter(appointment => appointment.id !== id);
+  const appointment = appointments.find(app => app.id === id)
   if (!appointment) {
     return res.status(404).json({ error: 'Agendamento não encontrado' });
   }
 
-  AppointmentService.deleteAppointment(id);
+  appointments = appointments.filter(appointment => appointment.id !== id);
   res.json({ message: 'Agendamento deletado com sucesso' });
 };
 
