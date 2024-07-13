@@ -7,7 +7,23 @@ const getAll = (req, res) => {
 };
 
 const createAppointment = (req, res) => {
-  const { name, birthDate, appointmentDate } = req.body;
+	const { name, birthDate, appointmentDay } = req.body;
+
+  if (!name || !birthDate || !appointmentDay) {
+    return res.status(400).json({ error: 'Nome, data de nascimento e horario do agendamento são obrigatorios' });
+  }
+
+  const appointmentDate = new Date(appointmentDay);
+
+  const invalidHour = (
+    appointmentDate.getMinutes() !== 0 || 
+    appointmentDate.getSeconds() !== 0 || 
+    appointmentDate.getMilliseconds() !== 0
+  );
+
+  if (invalidHour) {
+    return res.status(400).json({ error: 'Os agendamentos só podem ser feitos em horários exatos (ex: 11:00, 12:00)' });
+  }
 
   const appointmentsAtSameTime = appointments.filter(
     app => app.appointmentDate === appointmentDate
@@ -18,7 +34,7 @@ const createAppointment = (req, res) => {
   }
 
 	const appointmentsOnSameDay = appointments.filter(
-    app => new Date(app.appointmentDate).toDateString() === new Date(appointmentDate).toDateString()
+    app => new Date(app.appointmentDate).toDateString() === appointmentDate.toDateString()
   );
 
   if (appointmentsOnSameDay.length >= MAX_APPOINTMENTS_PER_DAY) {
