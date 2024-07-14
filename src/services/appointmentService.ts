@@ -1,11 +1,4 @@
-interface Appointment {
-    id: string;
-    name: string;
-    birthDate: string;
-    appointmentDate: Date;
-    completed: boolean;
-    conclusion?: string;
-  }
+import { Appointment } from '../interfaces/appointment.interface';
 
 let appointments: Appointment[] = [];
 const MAX_APPOINTMENTS_PER_SLOT = 2;
