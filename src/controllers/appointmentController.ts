@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
+import { appointmentSchema } from '../schemas/appointment.schema';
 
 interface Appointment {
   id: string;
@@ -14,25 +14,6 @@ let appointments: Appointment[] = [];
 const MAX_APPOINTMENTS_PER_HOUR = 2;
 const MAX_APPOINTMENTS_PER_DAY = 20;
 
-const appointmentSchema = z.object({
-  name: z.string().min(1, 'Nome é obrigatório'),
-  birthDate: z.string().refine(date => {
-    const parsedDate = new Date(date);
-    const today = new Date();
-    return !isNaN(parsedDate.getTime()) && parsedDate <= today;
-  }, {
-    message: 'A data de nascimento deve ser anterior ou igual à data atual'
-  }),
-  appointmentDay: z.string().refine(date => {
-    const parsedDate = new Date(date);
-    const today = new Date();
-    return !isNaN(parsedDate.getTime()) && parsedDate >= new Date(today.setHours(0, 0, 0, 0));
-  }, {
-    message: 'Os agendamentos só podem ser feitos para hoje ou datas futuras'
-  }),
-  conclusion: z.string().optional(),
-  completed: z.boolean().default(false)
-});
 
 export const getAll = (req: Request, res: Response) => {
   res.json(appointments);
