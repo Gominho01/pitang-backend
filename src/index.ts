@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const appointmentRoutes = require('./routes/router');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet'
+import appointmentRoutes from './routes/router';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
