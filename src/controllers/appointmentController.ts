@@ -1,6 +1,16 @@
-const { z } = require('zod');
+import { Request, Response } from 'express';
+import { z } from 'zod';
 
-let appointments = [];
+interface Appointment {
+  id: string;
+  name: string;
+  birthDate: string;
+  appointmentDate: Date;
+  completed: boolean;
+  conclusion?: string;
+}
+
+let appointments: Appointment[] = [];
 const MAX_APPOINTMENTS_PER_HOUR = 2;
 const MAX_APPOINTMENTS_PER_DAY = 20;
 
@@ -9,14 +19,14 @@ const appointmentSchema = z.object({
   birthDate: z.string().refine(date => {
     const parsedDate = new Date(date);
     const today = new Date();
-    return !isNaN(parsedDate) && parsedDate <= today;
+    return !isNaN(parsedDate.getTime()) && parsedDate <= today;
   }, {
     message: 'A data de nascimento deve ser anterior ou igual à data atual'
   }),
   appointmentDay: z.string().refine(date => {
     const parsedDate = new Date(date);
     const today = new Date();
-    return !isNaN(parsedDate) && parsedDate >= today.setHours(0, 0, 0, 0);
+    return !isNaN(parsedDate.getTime()) && parsedDate >= new Date(today.setHours(0, 0, 0, 0));
   }, {
     message: 'Os agendamentos só podem ser feitos para hoje ou datas futuras'
   }),
@@ -24,18 +34,18 @@ const appointmentSchema = z.object({
   completed: z.boolean().default(false)
 });
 
-const getAll = (req, res) => {
+export const getAll = (req: Request, res: Response) => {
   res.json(appointments);
 };
 
-const createAppointment = async (req, res) => {
+export const createAppointment = async (req: Request, res: Response) => {
   try {
     const { name, birthDate, appointmentDay} = appointmentSchema.parse(req.body);
     const appointmentDate = new Date(appointmentDay);
 
     const invalidHour = (
-      appointmentDate.getMinutes() !== 0 || 
-      appointmentDate.getSeconds() !== 0 || 
+      appointmentDate.getMinutes() !== 0 ||
+      appointmentDate.getSeconds() !== 0 ||
       appointmentDate.getMilliseconds() !== 0
     );
 
@@ -44,7 +54,7 @@ const createAppointment = async (req, res) => {
     }
 
     const appointmentsAtSameTime = appointments.filter(
-      app => new Date(app.appointmentDate).getTime() === appointmentDate.getTime()
+      app => app.appointmentDate.getTime() === appointmentDate.getTime()
     );
 
     if (appointmentsAtSameTime.length >= MAX_APPOINTMENTS_PER_HOUR) {
@@ -61,7 +71,7 @@ const createAppointment = async (req, res) => {
 
     const newAppointmentId = Date.now().toString();
 
-    const newAppointment = {
+    const newAppointment: Appointment = {
       id: newAppointmentId,
       name,
       birthDate,
@@ -71,14 +81,16 @@ const createAppointment = async (req, res) => {
 
     appointments.push(newAppointment);
     res.status(201).json(newAppointment);
-  } catch (error) {
-		console.log(error);
-		const errorMessage = error?.errors?.[0]?.message || 'Erro desconhecido';
-		return res.status(400).json({ error: errorMessage });
+  } catch (error: any) {
+    if (error.errors && error.errors.length > 0) {
+      return res.status(400).json({ error: error.errors[0].message });
+    } else {
+      return res.status(400).json({ error: 'Erro ao processar o agendamento' });
+    }
   }
 };
 
-const updateStatus = (req, res) => {
+export const updateStatus = (req: Request, res: Response) => {
   const { id } = req.params;
   const { completed, conclusion } = req.body;
 
@@ -93,7 +105,7 @@ const updateStatus = (req, res) => {
 };
 
 
-const getOne = (req, res) => {
+export const getOne = (req: Request, res: Response) => {
   const { id } = req.params;
 
   const appointment = appointments.find(app => app.id === id)
@@ -105,7 +117,7 @@ const getOne = (req, res) => {
 };
 
 
-const deleteAppointment = (req, res) => {
+export const deleteAppointment = (req: Request, res: Response) => {
   const { id } = req.params;
 
   const appointment = appointments.find(app => app.id === id)
