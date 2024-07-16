@@ -13,6 +13,13 @@ afterAll((done) => {
 });
 
 describe('Appointment Controller - Get All Appointments', () => {
+  it('should return an empty array when there are no appointments', async () => {
+    const res = await request(server)
+      .get('/api/appointments');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  }, 10000);
+
   it('should return all appointments', async () => {
     await request(server)
       .post('/api/appointments')
