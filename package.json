@@ -5,7 +5,7 @@
     "scripts": {
         "compile": "tsc",
         "test": "jest",
-        "start": "ts-node src/index.ts"
+        "start": "ts-node src/server.ts"
     },
     "keywords": [],
     "author": "",
