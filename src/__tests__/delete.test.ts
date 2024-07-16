@@ -11,3 +11,17 @@ beforeAll((done) => {
 afterAll((done) => {
   server.close(done);
 });
+
+describe('Appointment Controller - Delete Appointment', () => {
+  it('should delete an appointment by ID', async () => {
+    const createRes = await request(server)
+      .post('/api/appointments')
+      .send(validAppointmentMock);
+    const { id } = createRes.body;
+
+    const deleteRes = await request(server)
+      .delete(`/api/appointments/${id}`);
+    expect(deleteRes.status).toBe(200);
+    expect(deleteRes.body).toHaveProperty('message');
+  }, 10000);
+});
