@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../index';
+import { validAppointmentMock } from '../mocks/validAppointmentMock';
 
 let server: any;
 
@@ -13,9 +14,15 @@ afterAll((done) => {
 
 describe('Appointment Controller - Get All Appointments', () => {
   it('should return all appointments', async () => {
+    await request(server)
+      .post('/api/appointments')
+      .send(validAppointmentMock);
+
     const res = await request(server)
       .get('/api/appointments');
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-  }, 10000);
+    expect(res.body.length).toBeGreaterThan(0); 
+    expect(res.body[0]).toHaveProperty('name', validAppointmentMock.name);
+  }, 10000);
 });
