@@ -27,4 +27,13 @@ describe('Appointment Controller - Update Appointment', () => {
     expect(updateRes.body).toHaveProperty('completed', true);
     expect(updateRes.body).toHaveProperty('conclusion', 'Done');
   }, 10000);
+
+  it('should return 404 if the appointment does not exist', async () => {
+    const res = await request(server)
+      .patch('/api/appointments/nonexistentid')
+      .send({ completed: true, conclusion: 'Done' });
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty('error');
+  }, 10000);
+
 });
