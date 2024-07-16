@@ -3,6 +3,7 @@ import { server } from '../index';
 import { invalidAppointmentDayMock } from '../mocks/invalidAppointmentDayMock';
 import { invalidBirthDateMock } from '../mocks/invalidBirthDateMock';
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
+import {repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3} from "../mocks/repeatedAppointmentMock";
 
 afterAll((done) => {
   server.close(done);
@@ -30,6 +31,20 @@ describe('Appointment Controller - Create Appointment', () => {
     const res = await request(server)
       .post('/api/appointments')
       .send(invalidAppointmentDayMock);
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+  });
+
+  it('should not create more than 2 appointments at the same time', async () => {
+    await request(server)
+      .post('/api/appointments')
+      .send(repeatedAppointmentMock1);
+    await request(server)
+      .post('/api/appointments')
+      .send(repeatedAppointmentMock2);
+    const res = await request(server)
+      .post('/api/appointments')
+      .send(repeatedAppointmentMock3);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
   });
