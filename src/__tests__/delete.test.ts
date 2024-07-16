@@ -24,4 +24,11 @@ describe('Appointment Controller - Delete Appointment', () => {
     expect(deleteRes.status).toBe(200);
     expect(deleteRes.body).toHaveProperty('message');
   }, 10000);
+
+  it('should return 404 if the appointment does not exist', async () => {
+    const res = await request(server)
+      .delete('/api/appointments/nonexistentid');
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty('error');
+  }, 10000);
 });
