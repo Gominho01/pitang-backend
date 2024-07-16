@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { server } from '../index';
+import { invalidAppointmentDayMock } from '../mocks/invalidAppointmentDayMock';
 import { invalidBirthDateMock } from '../mocks/invalidBirthDateMock';
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
 
@@ -21,6 +22,14 @@ describe('Appointment Controller - Create Appointment', () => {
     const res = await request(server)
       .post('/api/appointments')
       .send(invalidBirthDateMock);
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+  });
+
+  it('should not create an appointment with invalid appointment day', async () => {
+    const res = await request(server)
+      .post('/api/appointments')
+      .send(invalidAppointmentDayMock);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
   });
