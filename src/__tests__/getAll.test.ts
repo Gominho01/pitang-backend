@@ -10,3 +10,12 @@ beforeAll((done) => {
 afterAll((done) => {
   server.close(done);
 });
+
+describe('Appointment Controller - Get All Appointments', () => {
+  it('should return all appointments', async () => {
+    const res = await request(server)
+      .get('/api/appointments');
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  }, 10000);
+});
