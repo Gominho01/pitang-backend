@@ -1,6 +1,6 @@
 const appointmentDay = new Date().toISOString().split('T')[0];
 
-const repeatedAppointmentMock1 = {
+export const repeatedAppointmentMock1 = {
     name: 'Bob Johnson',
     birthDate: '1985-05-15',
     appointmentDay,
@@ -8,7 +8,7 @@ const repeatedAppointmentMock1 = {
     conclusion: 'Initial check-up',
 };
 
-const repeatedAppointmentMock2 = {
+export const repeatedAppointmentMock2 = {
     name: 'Chris Evans',
     birthDate: '1980-07-20',
     appointmentDay,
@@ -16,7 +16,7 @@ const repeatedAppointmentMock2 = {
     conclusion: 'Initial check-up',
 };
 
-const repeatedAppointmentMock3 = {
+export const repeatedAppointmentMock3 = {
     name: 'Diana Prince',
     birthDate: '1975-12-25',
     appointmentDay,
@@ -24,4 +24,3 @@ const repeatedAppointmentMock3 = {
     conclusion: 'Initial check-up',
 };
 
-export default {repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3}
