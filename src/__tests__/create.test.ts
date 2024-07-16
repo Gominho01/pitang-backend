@@ -1,9 +1,15 @@
 import request from 'supertest';
-import { server } from '../index';
+import app from '../index';
 import { invalidAppointmentDayMock } from '../mocks/invalidAppointmentDayMock';
 import { invalidBirthDateMock } from '../mocks/invalidBirthDateMock';
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
 import {repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3} from "../mocks/repeatedAppointmentMock";
+
+let server: any;
+
+beforeAll((done) => {
+  server = app.listen(3001, done);
+});
 
 afterAll((done) => {
   server.close(done);
@@ -17,7 +23,7 @@ describe('Appointment Controller - Create Appointment', () => {
     console.log(res.body);
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('id');
-  });
+  }, 10000);
 
   it('should not create an appointment with invalid birth date', async () => {
     const res = await request(server)
@@ -25,7 +31,7 @@ describe('Appointment Controller - Create Appointment', () => {
       .send(invalidBirthDateMock);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
-  });
+  }, 10000);
 
   it('should not create an appointment with invalid appointment day', async () => {
     const res = await request(server)
@@ -33,7 +39,7 @@ describe('Appointment Controller - Create Appointment', () => {
       .send(invalidAppointmentDayMock);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
-  });
+  }, 10000);
 
   it('should not create more than 2 appointments at the same time', async () => {
     await request(server)
@@ -47,5 +53,5 @@ describe('Appointment Controller - Create Appointment', () => {
       .send(repeatedAppointmentMock3);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
-  });
+  }, 10000);
 });

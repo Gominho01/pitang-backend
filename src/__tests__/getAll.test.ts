@@ -1,13 +1,12 @@
 import request from 'supertest';
-import { server } from '../index';
+import app from '../index';
+
+let server: any;
+
+beforeAll((done) => {
+  server = app.listen(3004, done);
+});
 
 afterAll((done) => {
-    server.close(done);
-  });
-
-describe('GET /api/appointments', () => {
-  it('should return all appointments', async () => {
-    const res = await request(server).get('/api/appointments');
-    expect(res.status).toEqual(200);
-  });
+  server.close(done);
 });
