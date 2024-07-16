@@ -1,6 +1,6 @@
 import express from 'express';
+import helmet from 'helmet';
 import cors from 'cors';
-import helmet from 'helmet'
 import appointmentRoutes from './routes/router';
 
 const app = express();
@@ -12,6 +12,6 @@ app.use(helmet());
 
 app.use('/api', appointmentRoutes);
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
