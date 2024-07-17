@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../index';
 import { invalidAppointmentDayMock } from '../mocks/invalidAppointmentDayMock';
-import { invalidBirthDateMock } from '../mocks/invalidBirthDateMock';
+import { invalidBirthDateMock, invalidBirthDateMock2 } from '../mocks/invalidBirthDateMock';
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
 import {repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3} from "../mocks/repeatedAppointmentMock";
 
@@ -25,11 +25,17 @@ describe('Appointment Controller - Create Appointment', () => {
   }, 10000);
 
   it('should not create an appointment with invalid birth date', async () => {
-    const res = await request(server)
+    let res = await request(server)
       .post('/api/appointments')
       .send(invalidBirthDateMock);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
+
+    res = await request(server)
+    .post('/api/appointments')
+    .send(invalidBirthDateMock2);
+  expect(res.status).toBe(400);
+  expect(res.body).toHaveProperty('error');
   }, 10000);
 
   it('should not create an appointment with invalid appointment day', async () => {
