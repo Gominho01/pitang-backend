@@ -16,6 +16,11 @@ export const createAppointment = (newAppointment: Appointment) => {
     throw new Error('Número máximo de agendamentos para este dia atingido');
   }
 
+  const appointmentHour = appointmentDate.getHours();
+  if (appointmentHour < 11 || appointmentHour > 20) {
+    throw new Error('Os agendamentos só podem ser marcados entre 11h e 20h');
+  }
+
   const appointmentsAtSameTime = appointments.filter(
     app => app.appointmentDate.getTime() === appointmentDate.getTime()
   );
