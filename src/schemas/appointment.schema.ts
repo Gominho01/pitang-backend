@@ -5,9 +5,11 @@ export const appointmentSchema = z.object({
   birthDate: z.string().refine(date => {
     const parsedDate = new Date(date);
     const today = new Date();
-    return !isNaN(parsedDate.getTime()) && parsedDate <= today;
+    const maxAge = 120;
+    const earliestValidDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
+    return !isNaN(parsedDate.getTime()) && parsedDate <= today && parsedDate >= earliestValidDate;
   }, {
-    message: 'A data de nascimento deve ser anterior ou igual à data atual'
+    message: 'A data de nascimento deve ser anterior ou igual à data atual e não pode ser maior que 120 anos'
   }),
   appointmentDay: z.string().refine(date => {
     const parsedDate = new Date(date);
