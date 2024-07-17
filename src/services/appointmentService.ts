@@ -1,8 +1,7 @@
 import { Appointment } from '../interfaces/appointment.interface';
+import { MAX_APPOINTMENTS_PER_DAY, MAX_APPOINTMENTS_PER_SLOT } from '../constants';
 
 let appointments: Appointment[] = [];
-const MAX_APPOINTMENTS_PER_SLOT = 2;
-const MAX_APPOINTMENTS_PER_DAY = 20;
 
 export const getAllAppointments = () => appointments;
 

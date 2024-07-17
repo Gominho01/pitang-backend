@@ -1,9 +1,9 @@
-const appointmentDay = new Date().toISOString().split('T')[0];
+import { appointmentDate } from '../constants/index'
 
 export const repeatedAppointmentMock1 = {
     name: 'Bob Johnson',
     birthDate: '1985-05-15',
-    appointmentDay,
+    appointmentDay: appointmentDate,
     completed: false,
     conclusion: 'Initial check-up',
 };
@@ -11,7 +11,7 @@ export const repeatedAppointmentMock1 = {
 export const repeatedAppointmentMock2 = {
     name: 'Chris Evans',
     birthDate: '1980-07-20',
-    appointmentDay,
+    appointmentDay: appointmentDate,
     completed: false,
     conclusion: 'Initial check-up',
 };
@@ -19,7 +19,7 @@ export const repeatedAppointmentMock2 = {
 export const repeatedAppointmentMock3 = {
     name: 'Diana Prince',
     birthDate: '1975-12-25',
-    appointmentDay,
+    appointmentDay: appointmentDate,
     completed: false,
     conclusion: 'Initial check-up',
 };
