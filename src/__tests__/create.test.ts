@@ -20,7 +20,6 @@ describe('Appointment Controller - Create Appointment', () => {
     const res = await request(server)
       .post('/api/appointments')
       .send(validAppointmentMock);
-    console.log(res.body);
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('id');
   }, 10000);
