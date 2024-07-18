@@ -5,7 +5,8 @@
     "scripts": {
         "compile": "tsc",
         "test": "jest",
-        "start": "ts-node src/server.ts"
+        "start": "ts-node src/server.ts",
+        "coverage": "jest --coverage"
     },
     "keywords": [],
     "author": "",

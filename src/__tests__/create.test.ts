@@ -5,6 +5,8 @@ import { invalidBirthDateMock, invalidBirthDateMock2 } from '../mocks/invalidBir
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
 import { repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3 } from "../mocks/repeatedAppointmentMock";
 import { invalidTimeMock1, invalidTimeMock2, invalidTimeMock3, invalidTimeMock4 } from "../mocks/invalidHourMock";
+import { generateMocks } from '../mocks/generateMock';
+import { MAX_APPOINTMENTS_PER_DAY, appointmentDate } from '../constants';
 
 let server: any;
 
@@ -86,4 +88,25 @@ describe('Appointment Controller - Create Appointment', () => {
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error', 'Os agendamentos só podem ser marcados entre 11h e 20h');
   }, 10000);
+
+  it('should not create more than the maximum allowed appointments on the same day', async () => {
+    for (let i = 0; i < MAX_APPOINTMENTS_PER_DAY; i++) {
+      console.log(i)
+      await request(server)
+        .post('/api/appointments')
+        .send(generateMocks[i]);
+    }
+
+    const res = await request(server)
+      .post('/api/appointments')
+      .send({
+        name: 'Extra User',
+        birthDate: '1991-01-21',
+        appointmentDay: appointmentDate,
+        appointmentTime: '21:00',
+      });
+    
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error', 'Número máximo de agendamentos para este dia atingido');
+  }, 20000);
 });
