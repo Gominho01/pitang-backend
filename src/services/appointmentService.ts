@@ -24,8 +24,8 @@ export const createAppointment = (newAppointment: Appointment) => {
   }
 
   const appointmentHour = appointmentDate.getHours();
-  if (appointmentHour < 11 || appointmentHour > 20) {
-    throw new Error('Os agendamentos só podem ser marcados entre 11h e 20h');
+  if (appointmentHour < 9 || appointmentHour > 20) {
+    throw new Error('Os agendamentos só podem ser marcados entre 9h e 20h');
   }
 
   const appointmentsAtSameTime = appointments.filter(
