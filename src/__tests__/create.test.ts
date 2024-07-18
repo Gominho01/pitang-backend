@@ -4,6 +4,7 @@ import { invalidAppointmentDayMock } from '../mocks/invalidAppointmentDayMock';
 import { invalidBirthDateMock, invalidBirthDateMock2 } from '../mocks/invalidBirthDateMock';
 import { validAppointmentMock } from '../mocks/validAppointmentMock';
 import {repeatedAppointmentMock1, repeatedAppointmentMock2, repeatedAppointmentMock3} from "../mocks/repeatedAppointmentMock";
+import {invalidTimeMock1, invalidTimeMock2, invalidTimeMock3} from "../mocks/invalidHourMock";
 
 let server: any;
 
@@ -56,6 +57,26 @@ describe('Appointment Controller - Create Appointment', () => {
     const res = await request(server)
       .post('/api/appointments')
       .send(repeatedAppointmentMock3);
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+  }, 10000);
+
+  it('should not create an appointment with invalid time', async () => {
+    let res = await request(server)
+      .post('/api/appointments')
+      .send(invalidTimeMock1);
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+
+    res = await request(server)
+      .post('/api/appointments')
+      .send(invalidTimeMock2);
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+
+    res = await request(server)
+      .post('/api/appointments')
+      .send(invalidTimeMock3);
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
   }, 10000);
