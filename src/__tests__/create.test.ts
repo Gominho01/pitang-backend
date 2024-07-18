@@ -86,12 +86,11 @@ describe('Appointment Controller - Create Appointment', () => {
       .post('/api/appointments')
       .send(invalidTimeMock4);
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty('error', 'Os agendamentos só podem ser marcados entre 11h e 20h');
+    expect(res.body).toHaveProperty('error', 'Os agendamentos só podem ser marcados entre 9h e 20h');
   }, 10000);
 
   it('should not create more than the maximum allowed appointments on the same day', async () => {
     for (let i = 0; i < MAX_APPOINTMENTS_PER_DAY; i++) {
-      console.log(i)
       await request(server)
         .post('/api/appointments')
         .send(generateMocks[i]);
@@ -105,7 +104,7 @@ describe('Appointment Controller - Create Appointment', () => {
         appointmentDay: appointmentDate,
         appointmentTime: '21:00',
       });
-    
+  
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error', 'Número máximo de agendamentos para este dia atingido');
   }, 20000);

@@ -11,4 +11,4 @@ const generateAppointmentMocks = (day: string, startHour: number, total: number)
   return mocks;
 };
 
-export const generateMocks = generateAppointmentMocks('2025-07-19', 14, 23);
+export const generateMocks = generateAppointmentMocks('2025-07-19', 13, 22);
