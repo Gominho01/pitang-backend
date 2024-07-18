@@ -15,6 +15,12 @@ export const createAppointment = (newAppointment: Appointment) => {
   if (appointmentsOnSameDay.length >= MAX_APPOINTMENTS_PER_DAY) {
     throw new Error('Número máximo de agendamentos para este dia atingido');
   }
+  const appointmentMinutes = appointmentDate.getMinutes();
+  const appointmentSeconds = appointmentDate.getSeconds();
+  const appointmentMili = appointmentDate.getMilliseconds();
+  if (appointmentMinutes !== 0 || appointmentSeconds !== 0 || appointmentMili !== 0) {
+    throw new Error('Somente horarios fechados (ex: 11:00, 12:00, etc)');
+  }
 
   const appointmentHour = appointmentDate.getHours();
   if (appointmentHour < 11 || appointmentHour > 20) {
