@@ -21,7 +21,9 @@ export const createAppointment = async (req: Request, res: Response) => {
     AppointmentService.createAppointment(newAppointment);
     res.status(201).json(newAppointment);
   } catch (error: any) {
-    if (error.errors && error.errors.length > 0) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+    } else if (error.errors && error.errors.length > 0) {
       res.status(400).json({ error: error.errors[0].message });
     } else {
       res.status(400).json({ error: 'Erro ao processar o agendamento' });
