@@ -23,9 +23,7 @@ export const createAppointment = async (req: Request, res: Response) => {
   } catch (error: any) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
-    } else if (error.errors && error.errors.length > 0) {
-      res.status(400).json({ error: error.errors[0].message });
-    } else {
+    }else {
       res.status(400).json({ error: 'Erro ao processar o agendamento' });
     }
   }
