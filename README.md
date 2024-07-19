@@ -17,7 +17,7 @@ Este projeto consiste em um sistema para realizar agendamentos de vacinação co
 - Armazenamento em memoria dos dados.
 - Mensagem de confirmação exibida em modal/popup.
 - Persistência dos dados ao recarregar a página.
--• Dentro da página para consultar os agendamentos deve ser possível visualizar a
+- Dentro da página para consultar os agendamentos deve ser possível visualizar a
 listagem de agendamentos feitos e informar se o agendamento foi realizado ou
 não, e qual a conclusão do atendimento (se foi realizado)
 
@@ -31,8 +31,8 @@ do formulário
 - Utilizar ContextAPI para exibir o Modal/Popup
 
 ## Tecnologias Utilizadas
-- Node.js
-- Express.js
+- Node
+- Express
 - Axios
 - TypeScript
 - Jest
