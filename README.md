@@ -56,3 +56,12 @@ do formulário
     npm start
     ```
 5. O servidor estará disponível em `http://localhost:3000`
+## Testes
+1. Va para a pasta pitang backend
+    ```bash
+    cd pitang-backend
+    ```
+2. Rode os testes
+    ```bash
+    npm run test
+    ```
