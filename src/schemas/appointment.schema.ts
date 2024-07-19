@@ -1,11 +1,11 @@
 import { z } from 'zod';
+import { maxAge } from '../constants';
 
 export const appointmentSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   birthDate: z.string().refine(date => {
     const parsedDate = new Date(date);
     const today = new Date();
-    const maxAge = 120;
     const earliestValidDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
     return !isNaN(parsedDate.getTime()) && parsedDate <= today && parsedDate >= earliestValidDate;
   }, {
